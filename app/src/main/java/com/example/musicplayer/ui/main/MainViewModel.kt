@@ -35,7 +35,16 @@ class MainViewModel : ViewModel() {
     private fun fetchSongs() {
         viewModelScope.launch {
             try {
+                val response = RetrofitInstance.api.getData("eminem") // You can make this dynamic later
+                _songs.value = response.data1.map { apiSong ->
                     Song(
+                        id = apiSong.id,
+                        title = apiSong.title,
+                        artist = apiSong.artist.name,
+                        album = apiSong.album.cover_medium,
+                        preview = apiSong.preview
+                    )
+                }
 
             } catch (e: Exception) {
                 e.printStackTrace()

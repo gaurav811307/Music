@@ -14,5 +14,6 @@ interface MusicApiService {
         "x-rapidapi-host", "deezerdevs-deezer.p.rapidapi.com")
 
     @GET("search")
+    fun getData(@Query("q") query: String) : myData
 
 }
