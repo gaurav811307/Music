@@ -1,5 +1,6 @@
 package com.example.musicplayer.ui.main
 
+import androidx.compose.foundation.layout.add
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -36,16 +37,17 @@ class MainViewModel : ViewModel() {
         viewModelScope.launch {
             try {
                 val response = RetrofitInstance.api.getData("eminem") // You can make this dynamic later
-                _songs.value = response.data1.map { apiSong ->
+                val currentList = _songs.value.orEmpty().toMutableList() // Get the current list (or an empty one), and make it mutable
+                currentList.add(
                     Song(
-                        id = apiSong.id,
-                        title = apiSong.title,
-                        artist = apiSong.artist.name,
-                        album = apiSong.album.cover_medium,
-                        preview = apiSong.preview
+                        id = response.id,
+                        title = response.title,
+                        artist = response.artist,
+                        album = response.album,
+                        preview = response.preview
                     )
-                }
-
+                )
+                _songs.postValue(currentList)
             } catch (e: Exception) {
                 e.printStackTrace()
             }
